@@ -22,15 +22,22 @@ module.exports = {
       adapter: 'sails-mongo',
       host: process.env.OPENSHIFT_MONGODB_DB_HOST || '127.10.247.2',
       port: process.env.OPENSHIFT_MONGODB_DB_PORT || 27017,
-      user: 'my_db_user',
-      password: 'superLong&SecurePassword',
-      database: 'my_prod_db'
+      user: 'admin',
+      password: process.env.OPENSHIFT_MONGODB_DB_PASSWORD,
+      database: 'jobit'
     }
   },
   models: {
     schema: true,
     connection: 'ops',
     migrate: 'safe'
+  },
+  parameters: {
+    fbApiVersion: "v2.8",
+    appSecret: "notyet",
+    pageAccessToken: "notyet",
+    validationToken: "notyet",
+    serverURL: "https://something.tld"
   },
 
   /***************************************************************************
