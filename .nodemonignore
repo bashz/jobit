@@ -1,0 +1,7 @@
+.tmp/*
+node_modules/*
+views/
+assets/
+test/
+coverage/
+config/locales/*
