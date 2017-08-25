@@ -10,7 +10,7 @@ var sendAPI = require('../utils/sendAPI');
 module.exports = {
   subscribe: function (req, res) {
     if (req.query['hub.mode'] === 'subscribe' &&
-      req.query['hub.verify_token'] === sails.config.parameters.validationToken) {
+        req.query['hub.verify_token'] === sails.config.parameters.validationToken) {
       sails.log.info("Validating webhook");
       res.ok(req.query['hub.challenge']);
     } else {
@@ -45,7 +45,7 @@ module.exports = {
                * https://developers.facebook.com/docs/messenger-platform/webhook-reference/message-received 
                */
             });
-          } else if(messaging.postback) {
+          } else if (messaging.postback) {
             /*
              * Postback Event
              *
@@ -53,13 +53,13 @@ module.exports = {
              * https://developers.facebook.com/docs/messenger-platform/webhook-reference/postback-received
              * 
              */
-            
+
             /* 
              * Create a response object
              * https://developers.facebook.com/docs/messenger-platform/send-api-reference
              */
             var responseMessage = {};
-            return sendAPI.send(responseMessage, function(err, botResponse){
+            return sendAPI.send(responseMessage, function (err, botResponse) {
               if (err)
                 sails.log.error(err);
               /*
@@ -67,7 +67,7 @@ module.exports = {
                * The sent response is on the botResponse Object
                */
             });
-          } else if(messaging.optin) {
+          } else if (messaging.optin) {
             /*
              * Authorization Event
              *
@@ -77,7 +77,7 @@ module.exports = {
              *
              */
             return;
-          } else if(messaging.delivery) {
+          } else if (messaging.delivery) {
             /*
              * Delivery Confirmation Event
              *
@@ -86,7 +86,7 @@ module.exports = {
              *
              */
             return;
-          } else if(messaging.read) {
+          } else if (messaging.read) {
             /*
              * Message Read Event
              *
@@ -95,7 +95,7 @@ module.exports = {
              * 
              */
             return;
-          } else if(messaging.account_linking) {
+          } else if (messaging.account_linking) {
             /*
              * Account Link Event
              *
@@ -130,20 +130,20 @@ getUser = function (sender, cb) {
   if (!sender)
     cb('can not find sender', null);
   User.findOne({fbId: sender.id})
-    .exec(function (err, user) {
-      if (err)
-        cb(err, null);
-      if (!user) {
-        User.createFromFb(sender.id, function (err, user) {
-          if (!err)
-            sendAPI.welcome(user, function (message) {
-              sendAPI.typingOff(user, function (message) {
-                cb(err, user);
+      .exec(function (err, user) {
+        if (err)
+          cb(err, null);
+        if (!user) {
+          User.createFromFb(sender.id, function (err, user) {
+            if (!err)
+              sendAPI.welcome(user, function (message) {
+                sendAPI.typingOff(user, function (message) {
+                  cb(err, user);
+                });
               });
-            });
-        });
-      } else {
-        cb(null, user);
-      }
-    });
+          });
+        } else {
+          cb(null, user);
+        }
+      });
 };

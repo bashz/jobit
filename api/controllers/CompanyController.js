@@ -1,7 +1,7 @@
 /**
- * MessageController
+ * CompanyController
  *
- * @description :: Server-side logic for managing messages
+ * @description :: Server-side logic for managing companies
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
