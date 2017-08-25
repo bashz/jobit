@@ -1,0 +1,51 @@
+<ul id="dropdown" class="dropdown-content">
+    <li>
+        <a ng-click="choice = choice === 'publishedAt' ? '-publishedAt' : 'publishedAt'">
+            <i class="material-icons">{{choice === 'publishedAt'? 'arrow_drop_down' : 'arrow_drop_up'}}</i>Date
+        </a>
+    </li>
+</ul>
+<nav>
+    <div class="nav-wrapper teal darken-3">
+        <form class="col m8 s12">
+            <div class="input-field">
+                <input id="search" class="small" type="search" ng-model="search">
+                <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+                <i class="material-icons">close</i>
+            </div>
+        </form>
+        <ul class="right hide-on-small-and-down">
+            <li>
+                <a class="dropdown-button" data-activates="dropdown">Order by
+                    <i class="material-icons right">arrow_drop_down</i>
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<ul class="collapsible" data-collapsible="accordion">
+    <li class="collection-item avatar" ng-repeat="job in jobs| filter:search |orderBy: choice">
+        <div class="collapsible-header">
+            <div class="row" style="margin: 0; width: 100%">
+                <div class="col m3 s12">
+                    <img src="{{job.logo}}" alt="" class="circle z-depth-4" width="96" height="96">
+                </div>
+                <div class="col m9 s12">
+                    <div class="col s12">
+                        <span class="title">{{job.position}}</span>
+                        <a href="{{job.url}}" class="right right-align" target="_blank"><i class="material-icons">send</i></a>
+                    </div>
+                    <div class="col m6 s12">
+                        By {{job.company}}
+                    </div>
+                    <div class="col m6 s12 right right-align">
+                        At {{job.publishedAt| date:'yyyy-MM-dd HH:mm:ss'}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="collapsible-body">
+            <p ng-bind-html="job.description"></p>
+        </div>
+    </li>
+</ul>
