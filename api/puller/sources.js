@@ -36,5 +36,40 @@ module.exports = [
       }
       return jobs;
     }
+  },
+  {
+    name: 'remoteok',
+    id: 2,
+    options: {
+      hostname: 'remoteok.io',
+      port: 443,
+      path: '/remote-jobs.json',
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8'
+      }
+    },
+    map: function (job) {
+      return{
+        source: this.name,
+        sourceId: this.id,
+        originalId: job.id,
+        url: job.url,
+        publishedAt: new Date(job.date),
+        position: job.position,
+        description: job.description,
+        company: job.company,
+        logo: job.logo,
+        techs: job.tags
+      }
+    },
+    normalize: function (rawJobs) {
+      var jobs = [];
+      for (var i = 0; i < rawJobs.length; i++) {
+        var rawJob = this.map(rawJobs[i]);
+        jobs.push(new Job(rawJob));
+      }
+      return jobs;
+    }
   }
 ];
