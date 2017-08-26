@@ -23,12 +23,17 @@
         </ul>
     </div>
 </nav>
+<ul class="pagination">
+    <li class="{{pages.current === 1? 'disabled': 'waves-effect'}}"><a href="" ng-click="navigate($first)"><i class="material-icons">chevron_left</i></a></li>
+    <li ng-repeat="page in pages.pages" class="{{pages.current === $index ? 'active' : 'waves-effect'}}"><a href="" ng-click="navigate($index)">{{$index + 1}} </a></li>
+    <li class="{{pages.current === $last? 'disabled': 'waves-effect'}}"><a href="" ng-click="navigate($last)"><i class="material-icons">chevron_right</i></a></li>
+</ul>
 <ul class="collapsible" data-collapsible="accordion">
     <li class="collection-item avatar" ng-repeat="job in jobs| filter:search |orderBy: choice">
         <div class="collapsible-header">
             <div class="row" style="margin: 0; width: 100%">
                 <div class="col m3 s12">
-                    <img src="{{job.logo}}" alt="" class="circle z-depth-4" width="96" height="96">
+                    <img src="{{job.logo? job.logo: '/images/job96.png'}}" alt="" class="circle z-depth-4" width="96" height="96">
                 </div>
                 <div class="col m9 s12">
                     <div class="col s12">
