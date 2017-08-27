@@ -25,7 +25,7 @@ module.exports = [
         description: job.description,
         company: job.company,
         logo: job.company_logo,
-        techs: []
+        tags: []
       }
     },
     normalize: function (rawJobs) {
@@ -60,7 +60,7 @@ module.exports = [
         description: job.description,
         company: job.company,
         logo: job.logo,
-        techs: job.tags
+        tags: job.tags
       }
     },
     normalize: function (rawJobs) {

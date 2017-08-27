@@ -44,7 +44,7 @@ module.exports = {
     logo: {
       type: "string"
     },
-    techs: {
+    tags: {
       type: "array"
     }
   }

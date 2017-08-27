@@ -4,11 +4,16 @@
             <i class="material-icons">{{choice === 'publishedAt'? 'arrow_drop_down' : 'arrow_drop_up'}}</i>Date
         </a>
     </li>
+    <li>
+        <a ng-click="choice = choice === 'source' ? '-source' : 'source'">
+            <i class="material-icons">{{choice === 'source'? 'arrow_drop_down' : 'arrow_drop_up'}}</i>Source
+        </a>
+    </li>
 </ul>
 <nav>
     <div class="nav-wrapper teal darken-3">
-        <form class="col m8 s12">
-            <div class="input-field">
+        <form>
+            <div class="input-field search-field">
                 <input id="search" class="small" type="search" ng-model="search">
                 <label class="label-icon" for="search"><i class="material-icons">search</i></label>
                 <i class="material-icons">close</i>
@@ -16,41 +21,60 @@
         </form>
         <ul class="right hide-on-small-and-down">
             <li>
-                <a class="dropdown-button" data-activates="dropdown">Order by
+                <a class="dropdown-button order-field" data-activates="dropdown">Order by
                     <i class="material-icons right">arrow_drop_down</i>
                 </a>
             </li>
         </ul>
     </div>
 </nav>
-<ul class="pagination">
-    <li class="{{pages.current === 1? 'disabled': 'waves-effect'}}"><a href="" ng-click="navigate($first)"><i class="material-icons">chevron_left</i></a></li>
-    <li ng-repeat="page in pages.pages" class="{{pages.current === $index ? 'active' : 'waves-effect'}}"><a href="" ng-click="navigate($index)">{{$index + 1}} </a></li>
-    <li class="{{pages.current === $last? 'disabled': 'waves-effect'}}"><a href="" ng-click="navigate($last)"><i class="material-icons">chevron_right</i></a></li>
-</ul>
-<ul class="collapsible" data-collapsible="accordion">
-    <li class="collection-item avatar" ng-repeat="job in jobs| filter:search |orderBy: choice">
-        <div class="collapsible-header">
-            <div class="row" style="margin: 0; width: 100%">
-                <div class="col m3 s12">
-                    <img src="{{job.logo? job.logo: '/images/job96.png'}}" alt="" class="circle z-depth-4" width="96" height="96">
+<div class="container" style="min-height: 500px;">
+    <div class="row">
+        <ul class="pagination center">
+            <li class="{{pages.current === 1? 'disabled': 'waves-effect'}}"><a href="" ng-click="navigate($first)"><i class="material-icons">chevron_left</i></a></li>
+            <li ng-repeat="page in pages.pages" class="{{pages.current === $index ? 'active' : 'waves-effect'}}"><a href="" ng-click="navigate($index)">{{$index + 1}} </a></li>
+            <li class="{{pages.current === $last? 'disabled': 'waves-effect'}}"><a href="" ng-click="navigate($last)"><i class="material-icons">chevron_right</i></a></li>
+        </ul>
+        <ul class="collapsible" data-collapsible="accordion">
+            <li class="collection-item avatar" ng-repeat="job in jobs| filter:search |orderBy: choice">
+                <div class="collapsible-header">
+                    <div class="row full">
+                        <div class="col m3 s12">
+                            <img ng-src="{{job.logo? job.logo: '/images/job96.png'}}" src="/images/job96.png" alt="" class="circle z-depth-4" width="96" height="96">
+                        </div>
+                        <div class="col m9 s12">
+                            <div class="col s12">
+                                <span class="title">{{job.position}}</span>
+                                <a href="{{job.url}}" class="right right-align" target="_blank"><i class="material-icons">send</i></a>
+                            </div>
+                            <div class="col m6 s12">
+                                By <b>{{job.company}}</b>
+                            </div>
+                            <div class="col m6 s12 right right-align">
+                                At <b>{{job.publishedAt| date:'medium'}}</b>
+                            </div>
+                        </div>
+                        <div class="col s12">
+                            <div class="col m3 s12">
+                                From: <b>{{job.source}}</b>
+                            </div>
+                            <div class="col m9 s12">
+                                <div class="chip light-blue lighten-3" ng-repeat="tag in job.tags">
+                                    {{tag}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col m9 s12">
-                    <div class="col s12">
-                        <span class="title">{{job.position}}</span>
-                        <a href="{{job.url}}" class="right right-align" target="_blank"><i class="material-icons">send</i></a>
-                    </div>
-                    <div class="col m6 s12">
-                        By {{job.company}}
-                    </div>
-                    <div class="col m6 s12 right right-align">
-                        At {{job.publishedAt| date:'yyyy-MM-dd HH:mm:ss'}}
-                    </div>
+                <div class="collapsible-body">
+                    <p ng-bind-html="job.description"></p>
                 </div>
-            </div>
-        </div>
-        <div class="collapsible-body">
-            <p ng-bind-html="job.description"></p>
-        </div>
-    </li>
-</ul>
+            </li>
+        </ul>
+        <ul class="pagination center">
+            <li class="{{pages.current === 1? 'disabled': 'waves-effect'}}"><a href="" ng-click="navigate($first)"><i class="material-icons">chevron_left</i></a></li>
+            <li ng-repeat="page in pages.pages" class="{{pages.current === $index ? 'active' : 'waves-effect'}}"><a href="" ng-click="navigate($index)">{{$index + 1}} </a></li>
+            <li class="{{pages.current === $last? 'disabled': 'waves-effect'}}"><a href="" ng-click="navigate($last)"><i class="material-icons">chevron_right</i></a></li>
+        </ul>
+    </div>
+</div>

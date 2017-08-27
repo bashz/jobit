@@ -8,6 +8,6 @@ var Job = function (entry) {
   this.description = entry.description;
   this.company = entry.company;
   this.logo = entry.logo;
-  this.techs = entry.techs;
+  this.tags = entry.tags;
 };
 module.exports = Job;
