@@ -21,6 +21,6 @@
     "angular-route": "1.6.2",
     "angular-resource": "1.6.2",
     "angular-sanitize": "1.6.2",
-    "materialize": "^0.100.1"
+    "materialize": "^0.100.2"
   }
 }
