@@ -27,6 +27,9 @@ module.exports = {
     pageAccessToken: "notyet",
     validationToken: "notyet",
     serverURL: "https://something.tld"
+  },
+  log: {
+    level: "verbose"
   }
 
 };
