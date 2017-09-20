@@ -36,6 +36,28 @@ module.exports = {
     req.write(data);
     req.end();
   },
+  reportError: function (user, err, done) {
+    var messageData = {
+      recipient: {
+        id: user.fbId
+      },
+      message: {
+        text: "Ooops, Something went wrong :( , this accident was reported!\nplease try again later."
+      }
+    };
+    this.send(messageData, done);
+    if (sails.config.parameters.reportTo) {
+      var messageDataAdmin = {
+        recipient: {
+          id: sails.config.parameters.reportTo
+        },
+        message: {
+          text: JSON.stringify(err)
+        }
+      };
+      this.send(messageDataAdmin, done);
+    }
+  },
   typingOn: function (recipientId, done) {
     var messageData = {
       recipient: {
@@ -70,6 +92,42 @@ module.exports = {
                 title: "Start",
                 payload: "start"
               }]
+          }
+        }
+      }
+    };
+    this.send(messageData, done);
+  },
+  text: function (user, text, done) {
+    var messageData = {
+      recipient: {
+        id: user.fbId
+      },
+      message: {
+        text: text
+      }
+    };
+    this.send(messageData, done);
+  },
+  list: function (user, items, options, done) {
+    var messageData = {
+      recipient: {
+        id: user.fbId
+      },
+      message: {
+        attachment: {
+          type: "template",
+          payload: {
+            template_type: "list",
+            top_element_style: options.topElement || "large",
+            elements: items,
+            buttons: [
+              {
+                title: options.buttonTitle || "Find More",
+                type: "postback",
+                payload: options.payload
+              }
+            ]
           }
         }
       }

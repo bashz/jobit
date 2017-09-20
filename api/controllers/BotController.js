@@ -6,6 +6,22 @@
  */
 
 var sendAPI = require('../utils/sendAPI');
+var normalizer = require('../utils/normalize');
+
+unreconizedPostback = function (postback) {
+  sails.log.warn("Recived an unreconized postback, as bellow :");
+  sails.log.info(postback);
+};
+fallback = function (err, info) {
+  sails.log.info(new Date());
+  if (err)
+    return sails.log.error(err);
+  sails.log.info(info);
+};
+reportError = function (user, err) {
+  if (err)
+    return sendAPI.reportError(user, err, fallback);
+};
 
 module.exports = {
   subscribe: function (req, res) {
@@ -30,43 +46,20 @@ module.exports = {
           if (err)
             sails.log.error(err);
           if (messaging.message) {
-            // Comment the create function if you do not want to save messages
-            Message.create({
-              sender: user,
-              entry: entry.id,
-              message: messaging.message.text,
-              attachement: messaging.message.attachement
-            }).exec(function (err, message) {
-              if (err)
-                sails.log.error(err);
-              /*
-               * Implement your message recieved bot logic here
-               * The message is either a text or an attachement
-               * https://developers.facebook.com/docs/messenger-platform/webhook-reference/message-received 
-               */
-            });
+            
           } else if (messaging.postback) {
-            /*
-             * Postback Event
-             *
-             * This event is called when a postback is tapped on a Structured Message. 
-             * https://developers.facebook.com/docs/messenger-platform/webhook-reference/postback-received
-             * 
-             */
-
-            /* 
-             * Create a response object
-             * https://developers.facebook.com/docs/messenger-platform/send-api-reference
-             */
-            var responseMessage = {};
-            return sendAPI.send(responseMessage, function (err, botResponse) {
-              if (err)
-                sails.log.error(err);
-              /*
-               * Anything put here executes after sending the response.
-               * The sent response is on the botResponse Object
-               */
-            });
+            try {
+              var payload = JSON.parse(messaging.postback.payload);
+            }catch(e) {
+              reportError(user, e);
+            }
+            if (payload.action === "RECENT") {
+              var page = payload.page || 0;
+              return Job.recent(page, reportError, function (jobs) {
+                var options = {payload: JSON.stringify({action: "RECENT", page: page + 1})};
+                sendAPI.list(user, normalizer.jobs(jobs), options, fallback);
+              });
+            }
           } else if (messaging.optin) {
             /*
              * Authorization Event

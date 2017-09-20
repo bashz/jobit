@@ -47,6 +47,14 @@ module.exports = {
     tags: {
       type: "array"
     }
-  }
+  },
+  recent: function (page, error, success) {
+    Job.find({}).sort('publishedAt DESC').limit(4).skip(page * 4)
+      .exec(function (err, jobs) {
+        if (err)
+          return error(jobs, err);
+        success(jobs);
+      });
+  },
 };
 

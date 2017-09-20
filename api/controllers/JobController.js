@@ -34,6 +34,9 @@ module.exports = {
       }
       res.json(result);
     });
+  },
+  refer: function(req, res) {
+    
   }
 };
 
