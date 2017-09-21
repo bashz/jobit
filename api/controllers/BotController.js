@@ -47,7 +47,7 @@ module.exports = {
           if (err)
             return sails.log.error(err);
           if (messaging.message) {
-
+            sendAPI.text(user, 'assalem', fallback);
           } else if (messaging.postback) {
             try {
               var payload = JSON.parse(messaging.postback.payload);
