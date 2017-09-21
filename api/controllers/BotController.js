@@ -54,7 +54,9 @@ module.exports = {
             } catch (e) {
               reportError(user, e);
             }
-            if (payload.action === "RECENT") {
+            if (payload.action === "GET_STARTED") {
+              
+            } else if (payload.action === "RECENT") {
               var page = payload.page || 0;
               return Job.recent(page, reportError, function (jobs) {
                 var options = {payload: JSON.stringify({action: "RECENT", page: page + 1})};

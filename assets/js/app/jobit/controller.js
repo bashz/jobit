@@ -15,7 +15,7 @@ angular.module('jobitControllers', ['ngRoute', 'ngResource', 'ngSanitize'])
           var total = Math.ceil(response.total / 50);
           var pages = new Array(total);
           for (var i = 0; i < pages.length; ) {
-            pages[i] = i++
+            pages[i] = i++;
           }
           $scope.pages = {pages: pages, current: 0};
           load($scope.pages.current, true);
@@ -26,4 +26,9 @@ angular.module('jobitControllers', ['ngRoute', 'ngResource', 'ngSanitize'])
         $scope.pages.current = page;
         load($scope.pages.current, false);
       };
+    })
+    .controller('jobController', function ($scope, $routeParams, Job) {
+      Job.get({id: $routeParams.id}, function (response) {
+        $scope.job = response;
+      });
     });

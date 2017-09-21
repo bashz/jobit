@@ -1,7 +1,9 @@
+var moment = require('moment');
+
 var Job = function (job) {
   this.title = job.position;
   this.image_url = job.logo || (sails.config.parameters.serverURL + '/images/job96.png');
-  this.subtitle = "Published: " + job.publishedAt + "\n" +
+  this.subtitle = "Published: " + moment(job.publishedAt).fromNow() + "\n" +
       "Company: " + job.company;
   this.default_action = {
     type: "web_url",

@@ -4,5 +4,8 @@ app.config(function ($routeProvider) {
       .when('/', {
         templateUrl: 'templates/jobit/home.html',
         controller: 'homeController'
+      }).when('/job/:id', {
+        templateUrl: 'templates/jobit/job.html',
+        controller: 'jobController'
       });
 });
