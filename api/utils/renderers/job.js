@@ -7,10 +7,10 @@ var Job = function (job) {
       "Company: " + job.company;
   this.default_action = {
     type: "web_url",
-    url: sails.config.parameters.serverURL,
+    url: sails.config.parameters.serverURL + '/#!/job/' + job.id,
     messenger_extensions: true,
     webview_height_ratio: "tall",
-    fallback_url: sails.config.parameters.serverURL
+    fallback_url: sails.config.parameters.serverURL + '/#!/job/' + job.id
   };
   this.buttons = [
     {
