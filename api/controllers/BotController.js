@@ -6,11 +6,11 @@
  */
 
 var sendAPI = require('../utils/sendAPI');
-var normalizer = require('../utils/normalize');
+var jobRenderer = require('../utils/renderers/job');
 
-unreconizedPostback = function (postback) {
-  sails.log.warn("Recived an unreconized postback, as bellow :");
-  sails.log.info(postback);
+unreconizedMessage = function (message) {
+  sails.log.warn("Recived an unreconized message, as bellow :");
+  sails.log.info(message);
 };
 fallback = function (err, info) {
   sails.log.info(new Date());
@@ -36,69 +36,36 @@ module.exports = {
   },
   handleMessage: function (req, res) {
     var data = req.allParams();
+    if(data.object !== 'page' || !data.entry)
+      return res.badRequest();
     data.entry.forEach(function (entry) {
       entry.messaging.forEach(function (messaging) {
-        //Uncomment to display the famous typing 3 dots to the user until your bot reply
-        //sendAPI.typingOn(message.sender.id, function (m) {
-        //  return;
-        //});
+        sendAPI.typingOn(messaging.sender.id, function (m) {
+          return;
+        });
         getUser(messaging.sender, function (err, user) {
           if (err)
-            sails.log.error(err);
+            return sails.log.error(err);
           if (messaging.message) {
-            
+
           } else if (messaging.postback) {
             try {
               var payload = JSON.parse(messaging.postback.payload);
-            }catch(e) {
+            } catch (e) {
               reportError(user, e);
             }
             if (payload.action === "RECENT") {
               var page = payload.page || 0;
               return Job.recent(page, reportError, function (jobs) {
                 var options = {payload: JSON.stringify({action: "RECENT", page: page + 1})};
-                sendAPI.list(user, normalizer.jobs(jobs), options, fallback);
+                sendAPI.list(user, jobRenderer.list(jobs), options, fallback);
               });
+            } else {
+              unreconizedMessage(messaging.postback);
             }
-          } else if (messaging.optin) {
-            /*
-             * Authorization Event
-             *
-             * The value for 'messaging.optin.ref' is defined in the entry point.
-             * For the "Send to Messenger" plugin, it is the 'data-ref' field. 
-             * https://developers.facebook.com/docs/messenger-platform/webhook-reference/authentication
-             *
-             */
-            return;
-          } else if (messaging.delivery) {
-            /*
-             * Delivery Confirmation Event
-             *
-             * This event is sent to confirm the delivery of a messaging.
-             * https://developers.facebook.com/docs/messenger-platform/webhook-reference/message-delivered
-             *
-             */
-            return;
-          } else if (messaging.read) {
-            /*
-             * Message Read Event
-             *
-             * This event is called when a previously-sent message has been read.
-             * https://developers.facebook.com/docs/messenger-platform/webhook-reference/message-read
-             * 
-             */
-            return;
-          } else if (messaging.account_linking) {
-            /*
-             * Account Link Event
-             *
-             * This event is called when the Link Account or UnLink Account action has been tapped.
-             * https://developers.facebook.com/docs/messenger-platform/webhook-reference/account-linking
-             * 
-             */
-            return;
-          } else
-            sails.log.error("unknow message type recieved: " + messaging);
+          } else {
+            unreconizedMessage(messaging.message);
+          }
         });
       });
     });

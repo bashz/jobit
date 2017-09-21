@@ -22,16 +22,20 @@ module.exports = {
         body += chunk;
       });
       res.on('end', function () {
-        var message = JSON.parse(body);
+        try{
+          var message = JSON.parse(body);
+        }catch(e){
+          return cb(e, null);
+        }
         if (!message)
-          return cb('error while parsing json response, response was : ' + body, null);
+          return cb('Empty Response', null);
         if (message.error)
           return cb(message, null);
         return cb(null, message);
       });
     });
     req.on('error', function (err) {
-      return sails.log.error(err);
+      return cb(err, null);
     });
     req.write(data);
     req.end();
